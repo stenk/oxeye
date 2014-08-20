@@ -1,0 +1,375 @@
+body {
+    background-color: #fff;
+    color: #333;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 18px;
+}
+
+a {
+    color: #000;
+    outline: none;
+    text-decoration: none;
+}
+
+
+.side-panel {
+    position: fixed;
+    top: 50px; bottom: 0;
+    left: 0; width: 280px;
+
+    padding-left: 15px;
+
+    & > .subscribe-button {
+        display: inline-block;
+        padding: 5px 20px;
+        margin-top: 20px;
+
+        border-radius: 2px;
+        background-color: #d74937;
+        color: white;
+        font-weight: bold;
+        font-size: 11px;
+
+        cursor: pointer;
+
+        &:hover {
+            background-color: #cc4534;
+        }
+
+        &.pressed {
+            background-color: #c24232;
+        }
+    }
+
+    & > .starred-link {
+        font-size: 13px;
+        margin-top: 30px;
+        margin-bottom: 3px;
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+            & > .label { color: #5e6e7e; }
+        }
+
+        & > .fa {
+            color: #d74937;
+            font-size: 16px;
+        }
+
+        & > .label {
+            display: inline;
+            font-weight: bold;
+            padding-left: 7px;
+        }
+    }
+
+    & > .feed-list {
+        margin-top: 0px;
+
+        & > .feed {
+            overflow: hidden;
+            font-size: 13px;
+            margin: 3px 0;
+
+            &.highlighted {
+                color: #d14836;
+            }
+
+            & > .favicon {
+                float: left;
+
+                & > img {
+                    width: 16px;
+                    height: 16px;
+                }
+            }
+
+            & > .title {
+                float: left;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                max-width: 170px;
+                padding-left: 7px;
+                cursor: pointer;
+
+                &:hover {
+                    text-decoration: underline;
+                    color: #555;
+                }
+            }
+
+            &.has-unread-entries > .title {
+                font-weight: bold;
+            }
+
+            & > .unread-entries-count {
+                float: left;
+                padding-left: 7px;
+                color: #666;
+            }
+        }
+    }
+}
+
+.top-panel {
+    position: fixed;
+    top: 0; height: 50px;
+    left: 0; width: 100%;
+    z-index: 1;
+    overflow: hidden;
+
+    background-color: white;
+    border-bottom: 1px solid #ebebeb;
+    padding-left: 15px;
+
+    & > .logo {
+        float: left;
+        width: 280px;
+        margin-top: 15px;
+        color: #dd4b39;
+        font-size: 25px;
+
+        & > .fa {
+            padding-right: 10px;
+            color: #dd4b39;
+        }
+    }
+
+    & > .feed-title {
+        float: left;
+        margin-top: 17px;
+
+        color: #45627e;
+        font-size: 18px;
+    }
+
+    & > .unread-entries-count {
+        float: left;
+        margin-left: 10px;
+        margin-top: 17px;
+
+        color: #9aa6af;
+        font-size: 18px;
+    }
+
+    & > .buttons {
+        position: absolute;
+        right: 20px; top: 11px;
+
+        background-color: white;
+        font-size: 14px;
+        color: #444;
+
+        & > * {
+            padding: 6px;
+            min-width: 50px;
+            margin: 0 5px;
+
+            border-radius: 2px;
+            border: 1px solid #dcdcdc;
+            cursor: pointer;
+
+            text-align: center;
+            background-color: #f1f1f1;
+            color: #444;
+        }
+
+        & > *:hover {
+            border-color: #aaa;
+            background-color: #eaeaea;
+        }
+
+        & > *.pressed {
+            background-color: #e0e0e0;
+        }
+
+        & > .refresh-button {
+        }
+
+        & > .mark-all-as-read-button {
+        }
+
+        & > .cancel-mark-as-read-button {
+            border-color: white;
+            background-color: white;
+            cursor: default;
+
+            &.active {
+                color: #fff;
+                border-color: #d74937;
+                background-color: #d74937;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #cc4534;
+                }
+
+                &.pressed {
+                    background-color: #c24232;
+                }
+            }
+        }
+    }
+}
+
+.entries-panel {
+    position: absolute;
+    top: 50px; left: 280px;
+    right: 0; bottom: 0;
+    padding: 0 10px;
+
+    & > .entry-list {
+        margin-top: 5px;
+        margin-bottom: 20px;
+
+        & > .entry-list-row {
+            &.expanded {
+                border-bottom: 1px solid #ddd;
+                border-left: 3px solid #3498db;
+            }
+
+            &.expanded > .entry {
+                padding-left: 0;
+            }
+
+            &.selected {
+            }
+
+            &.batch-selected > .entry {
+                border-left: 2px solid gray;
+                padding-left: 0;
+            }
+
+            &.is-read > .entry {
+                background-color: #f0f0f0;
+
+                & > .title {
+                    font-weight: normal;
+                }
+
+                & > .age {
+                    background: linear-gradient(to right, rgba(240,240,240,0) 0, #f0f0f0 40%, #f0f0f0 100%);
+                }
+            }
+        }
+
+        & > .entry-list-row > .entry {
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+            padding: 0 2px;
+
+            cursor: pointer;
+            font-size: 13px;
+            border-bottom: 1px solid #ddd;
+
+            & > .entry-button, & > .peek-button {
+                color: #6f7f8d;
+                padding: 3px 10px;
+
+                &:hover {
+                    cursor: pointer;
+                    border-radius: 5px;
+                    background-color: #3879d9;
+                    color: white;
+                }
+            }
+
+            & > .feed-title {
+                display: inline-block;
+                overflow: hidden;
+                width: 100px;
+                margin-left: 10px;
+                text-overflow: ellipsis;
+                vertical-align: middle;
+            }
+
+            & > .title {
+                margin: 6px 0;
+                display: inline-block;
+                margin-left: 10px;
+                font-weight: bold;
+            }
+
+            & > .snippet {
+                display: inline;
+                color: #999;
+
+                a { color: #999; text-decoration: underline; }
+                a:hover { color: black; }
+            }
+
+            & > .age {
+                position: absolute;
+                right: 0; top: 6px;
+                padding-right: 10px;
+                padding-left: 30px;
+                background: linear-gradient(to right, rgba(255,255,255,0) 0, #fff 40%, #fff 100%);
+                color: #999;
+            }
+        }
+
+        & > .entry-list-row > .details {
+            margin-top: -1px;
+            border: 1px solid #ddd;
+            border-bottom: 0;
+            border-left: 0;
+            padding: 10px 30px;
+            padding-bottom: 20px;
+            overflow: hidden;
+
+            a {
+                color: #15c;
+            }
+
+            & > .title {
+                display: block;
+                margin: 0 0 10px 0;
+                max-width: 560px;
+
+                font-weight: bold;
+                font-size: 20px;
+                line-height: 30px;
+            }
+
+            & > .content {
+                max-width: 560px;
+                line-height: 22px;
+                font-size: 14px;
+
+                img {
+                    max-width: 560px;
+                }
+
+                a:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}
+
+.subscribe-dialog {
+    position: fixed;
+    left: 15px; top: 100px;
+    padding: 7px 15px;
+
+    background-color: #f7f7f7;
+    border: 1px solid #d0d0d0;
+    color: #666;
+    font-size: 14px;
+
+
+    & > .caption {
+    }
+
+    & > input {
+        padding: 5px;
+        width: 300px;
+        font-size: 16px;
+    }
+
+}

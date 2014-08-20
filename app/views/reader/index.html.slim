@@ -1,0 +1,60 @@
+div ng-app="reader" ng-controller="ReaderCtrl"
+
+  .side-panel
+    .subscribe-button.pressable ng-click="subscribeButtonClick()" SUBSCRIBE
+
+    .starred-link ng-click="showFavorites()"
+      i.fa.fa-star
+      .label Favorite Articles
+
+    .feed-list on-swap="swapFeedPositions" sortable=""
+      .feed (
+          ng-repeat = "feed in feeds"
+          ng-class  = "{'has-unread-entries': feed.unreadEntriesCount > 0, highlighted: feed.highlighted}"
+        )
+        a.favicon target="_blank" href="{{ feed.siteUrl }}"
+          img ng-src="{{ feed.isLoading ? '/assets/ajax-loader.gif' : feed.favicon }}"
+        .title title="{{ feed.title }}" ng-click="selectFeed(feed)" = "{{ feed.title || feed.url }}"
+        .unread-entries-count = "{{ feed.unreadEntriesCount >= 1000 ? '1000+' : feed.unreadEntriesCount }}"
+
+  .top-panel
+    .logo
+      i.fa.fa-rss
+      | oxeye Reader
+
+    .feed-title = "{{ viewingFavorite ? 'Favorite Articles' : selectedFeed.title }}"
+
+    .unread-entries-count ng-if="!viewingFavorite"
+      | {{ selectedFeed.unreadEntriesCount || '0' }} Unread articles
+
+    .buttons ng-if="!viewingFavorite"
+      i.refresh-button.fa.fa-refresh.pressable title="Refresh" ng-click="refreshFeed()"
+      i.mark-all-as-read-button.fa.fa-check.pressable title="Mark all as read" ng-click="markAllAsRead()"
+      i.cancel-mark-as-read-button.fa.fa-warning.pressable (
+        ng-click="cancelBatchMarking()"
+        ng-class="{active: batchMarked.length > 1}"
+        title="Cancel marking{{ batchMarked.length ? ' ' + batchMarked.length + ' ' : ' ' }}entries as read"
+      )
+      i.unsubscribe-button.fa.fa-ban.pressable title="Unsubscribe" ng-click="unsubscribe()"
+
+  .entries-panel
+    .entry-list
+      .entry-list-row ng-repeat="entry in entries" ng-class="{expanded: entry.expanded, 'is-read': entry.isRead}"
+        .entry
+          .entry-button.fa (
+            ng-class="{'fa-star': entry.isFavorite, 'fa-star-o': !entry.isFavorite}"
+            ng-click="toggleFavoriteStatus(entry)"
+          )
+          a.peek-button.fa.fa-eye href="{{ entry.url }}" target="_blank" title="Peek this" ng-if="!viewingFavorite"
+          .feed-title ng-if="viewingFavorite" title="{{ entry.feed.title }}" {{ entry.feed.title }}
+          a.title target="_blank" href="{{ entry.url }}" ng-bind-html="entry.title"
+          .snippet ng-bind-html="' - ' + entry.snippet"
+          .age title="Published at {{ (entry.publishedAt || entry.createdAt) | date: 'dd.MM.yy HH:mm' }}"
+            | {{ entry.age }}
+
+        .details ng-if="entry.expanded"
+          a.title href="{{ entry.url }}" target="_blank" ng-bind-html="entry.title"
+          .content ng-bind-html="entry.content"
+
+
+    .subscribe-dialog callback="subscribeCallback" visible="isSubscribeDialogVisible"
